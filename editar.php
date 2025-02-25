@@ -12,13 +12,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $direccion = $_POST['direccion'];
 
-    if (!empty($nombre) && !empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $stmt = $pdo->prepare('UPDATE contactos SET nombre = ?, telefono = ?, email = ?, direccion = ? WHERE id = ?');
-        $stmt->execute([$nombre, $telefono, $email, $direccion, $id]);
-        header('Location: index.php');
-        exit;
-    } else {
+    if (empty($nombre) || empty($telefono) || empty($email) || empty($direccion) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Por favor, complete todos los campos obligatorios y asegúrese de que el email sea válido.";
+    } else {
+        $stmt = $pdo->prepare('UPDATE contactos SET nombre = ?, telefono = ?, email = ?, direccion = ? WHERE id = ?');
+        if ($stmt->execute([$nombre, $telefono, $email, $direccion, $id])) {
+            $success = "Conexión correcta y datos actualizados con éxito.";
+        } else {
+            $error = "Ocurrió un problema al actualizar los datos.";
+        }
     }
 }
 ?>
@@ -40,12 +42,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label>Email:</label><br>
         <input type="email" name="email" value="<?= htmlspecialchars($contacto['email']) ?>" required><br>
         <label>Dirección:</label><br>
-        <textarea name="direccion"><?= htmlspecialchars($contacto['direccion']) ?></textarea><br>
+        <textarea name="direccion" required><?= htmlspecialchars($contacto['direccion']) ?></textarea><br>
         <button type="submit">Guardar</button>
     </form>
     <?php if (isset($error)): ?>
     <p style="color:red"><?= $error ?></p>
     <?php endif; ?>
+    <?php if (isset($success)): ?>
+    <p style="color:green"><?= $success ?></p>
+    <?php endif; ?>
     <a href="index.php">Volver</a>
 </body>
 </html>
+

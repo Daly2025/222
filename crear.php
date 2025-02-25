@@ -23,23 +23,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Agregar Contacto</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Agregar Contacto</h1>
     <form method="post" action="">
-        <label>Nombre:</label><br>
-        <input type="text" name="nombre" required><br>
-        <label>Teléfono:</label><br>
-        <input type="text" name="telefono" required><br>
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br>
-        <label>Dirección:</label><br>
-        <textarea name="direccion"></textarea><br>
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required>
+        <label>Teléfono:</label>
+        <input type="text" name="telefono" required>
+        <label>Email:</label>
+        <input type="email" name="email" required>
+        <label>Dirección:</label>
+        <textarea name="direccion"></textarea>
         <button type="submit">Guardar</button>
     </form>
     <?php if (isset($error)): ?>
-    <p style="color:red"><?= $error ?></p>
+    <p><?= $error ?></p>
     <?php endif; ?>
     <a href="index.php">Volver</a>
-</body>
-</html>
